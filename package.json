@@ -1,0 +1,57 @@
+{
+  "name": "prosemirror-slash-menu",
+  "version": "0.0.1",
+  "description": "Slash menu for ProseMirror",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "dev": "rollup -c -w --bundleConfigAsCjs",
+    "yalc:watch": "nodemon --watch dist --exec 'yalc push'",
+    "dev:watch": "npm-run-all --parallel dev yalc:watch",
+    "format": "eslint src --ext .ts --fix",
+    "prepublishOnly": "npm run build && npm test && npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
+    "lint": "tsc --noEmit && eslint src --ext .ts",
+    "test": "echo \"no test specified\" && exit 0",
+    "upgrade-interactive": "npm-check --update",
+    "publish:np": "np"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emergence-engineering/prosemirror-slash-menu.git"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "Emergence Engineering",
+  "keywords": [
+    "ProseMirror",
+    "slash",
+    "menu"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emergence-engineering/prosemirror-slash-menu/issues"
+  },
+  "homepage": "https://github.com/emergence-engineering/prosemirror-slash-menu#readme",
+  "dependencies": {
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-view": "^1.31.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "np": "^8.0.2",
+    "npm-check": "^6.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.8",
+    "rollup": "^3.24.0",
+    "rollup-plugin-minification": "^0.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^5.1.3"
+  }
+}
