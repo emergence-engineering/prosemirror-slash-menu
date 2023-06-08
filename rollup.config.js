@@ -4,7 +4,7 @@ import { terser } from "rollup-plugin-minification";
 import pkg from "./package.json";
 
 export default {
-  name: "prosemirror-image-plugin",
+  name: "prosemirror-slash-menu",
   input: "src/index.ts",
   output: [
     {
