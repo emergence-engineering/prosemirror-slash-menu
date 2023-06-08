@@ -8,26 +8,19 @@ import {
 import { getCase, SlashCases } from "./cases";
 import { closeSubMenu, nextItem, openSubMenu, prevItem } from "./actions";
 import { SlashMenuMeta, SlashMenuState } from "./types";
+import { SlashMetaTypes } from "./enums";
 
 export const SlashMenuKey = new PluginKey<SlashMenuState>("slash-menu-plugin");
 
-export enum SlashMetaTypes {
-  open = "open",
-  close = "close",
-  execute = "execute",
-  nextItem = "nextItem",
-  prevItem = "prevItem",
-  openSubMenu = "openSubMenu",
-  closeSubMenu = "closeSubMenu",
-  inputChange = "inputChange",
-}
-
 export const SlashMenuPlugin = (config: Partial<SlashMenuState>) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const initialState: SlashMenuState = {
     ...config,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     elements: config.filteredElements,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ignoredKeys: config.ignoredKeys,
   };
@@ -47,7 +40,7 @@ export const SlashMenuPlugin = (config: Partial<SlashMenuState>) => {
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
             return true;
           case SlashCases.CloseMenu: {
-            const subMenuId = state.subMenuId;
+            const { subMenuId } = state;
             if (subMenuId) {
               dispatchWithMeta(view, SlashMenuKey, {
                 type: SlashMetaTypes.closeSubMenu,
@@ -121,7 +114,7 @@ export const SlashMenuPlugin = (config: Partial<SlashMenuState>) => {
       init() {
         return initialState;
       },
-      apply(tr, state, oldEditorState, newEditorState) {
+      apply(tr, state) {
         const meta: SlashMenuMeta = tr.getMeta(SlashMenuKey);
         switch (meta?.type) {
           case SlashMetaTypes.open:
@@ -147,11 +140,11 @@ export const SlashMenuPlugin = (config: Partial<SlashMenuState>) => {
               filter: meta.filter || "",
             };
           }
+          default:
+            return state;
         }
-
-        return state;
       },
     },
-    initialState: initialState,
+    initialState,
   });
 };

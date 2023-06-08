@@ -1,6 +1,6 @@
 import { EditorView } from "prosemirror-view";
 
-import { SlashMetaTypes } from "./plugin";
+import { SlashMetaTypes } from "./enums";
 
 export type ItemId = string | "root";
 export type ItemType = "command" | "submenu";
@@ -16,6 +16,7 @@ export interface CommandItem extends MenuItem {
   available: () => boolean;
 }
 
+// eslint-disable-next-line no-use-before-define
 export type MenuElement = CommandItem | SubMenu;
 
 export interface SubMenu extends MenuItem {

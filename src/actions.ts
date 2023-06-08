@@ -54,7 +54,7 @@ export const prevItem = (state: SlashMenuState) => {
   if (!prevId) return state;
   return { ...state, selected: prevId };
 };
-export const filterItems = (state: SlashMenuState, filter: String) => {
+export const filterItems = (state: SlashMenuState, filter: string) => {
   return { ...state, filter };
 };
 export const updateInput = (

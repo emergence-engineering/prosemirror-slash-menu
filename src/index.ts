@@ -1,4 +1,4 @@
-import { SlashMenuPlugin, SlashMenuKey, SlashMetaTypes } from "./plugin";
+import { SlashMenuPlugin, SlashMenuKey } from "./plugin";
 import { dispatchWithMeta, getElementById, ignoredKeys } from "./utils";
 import {
   SlashMenuState,
@@ -10,6 +10,7 @@ import {
   CommandItem,
   ItemType,
 } from "./types";
+import { SlashMetaTypes } from "./enums";
 
 export {
   SlashMenuPlugin,

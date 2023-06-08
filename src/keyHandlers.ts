@@ -1,7 +1,8 @@
-import { dispatchWithMeta, getElementById } from "./utils";
-import { SlashMenuKey, SlashMetaTypes } from "./plugin";
 import { EditorView } from "prosemirror-view";
+import { dispatchWithMeta, getElementById } from "./utils";
+import { SlashMenuKey } from "./plugin";
 import { SlashMenuState } from "./types";
+import { SlashMetaTypes } from "./enums";
 
 const execute = (view: EditorView, state: SlashMenuState) => {
   const menuElement = getElementById(state.selected, state);
@@ -27,7 +28,7 @@ const closeMenu = (
   initialState: SlashMenuState,
   event: KeyboardEvent
 ) => {
-  const subMenuId = state.subMenuId;
+  const { subMenuId } = state;
   if (subMenuId) {
     dispatchWithMeta(view, SlashMenuKey, {
       type: SlashMetaTypes.closeSubMenu,
@@ -47,6 +48,6 @@ const closeMenu = (
 };
 
 export const keyHandlers = {
-  execute: execute,
-  closeMenu: closeMenu,
+  execute,
+  closeMenu,
 };
