@@ -106,7 +106,7 @@ export const getFilteredItems = (state: SlashMenuState, input: string) => {
     );
 };
 
-export const ignoredKeys = [
+export const defaultIgnoredKeys = [
   "Shift",
   "Alt",
   "Control",

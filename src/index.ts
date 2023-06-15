@@ -1,5 +1,5 @@
 import { SlashMenuPlugin, SlashMenuKey } from "./plugin";
-import { dispatchWithMeta, getElementById, ignoredKeys } from "./utils";
+import { dispatchWithMeta, getElementById, defaultIgnoredKeys } from "./utils";
 import {
   SlashMenuState,
   SlashMenuMeta,
@@ -18,7 +18,7 @@ export {
   SlashMetaTypes,
   dispatchWithMeta,
   getElementById,
-  ignoredKeys,
+  defaultIgnoredKeys,
   SlashMenuState,
   SlashMenuMeta,
   SubMenu,

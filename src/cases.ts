@@ -1,5 +1,5 @@
 import { EditorView } from "prosemirror-view";
-import { getElementById, ignoredKeys } from "./utils";
+import { getElementById, defaultIgnoredKeys } from "./utils";
 import { SlashMenuState } from "./types";
 
 export enum SlashCases {
@@ -74,7 +74,7 @@ export const getCase = (
     if (state.filter.length > 0 && event.key === "Backspace") {
       return SlashCases.removeChar;
     }
-    if (!ignoredKeys.includes(event.key)) {
+    if (!defaultIgnoredKeys.includes(event.key)) {
       return SlashCases.addChar;
     }
   }

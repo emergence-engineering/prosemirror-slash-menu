@@ -4,25 +4,25 @@ import {
   getElementById,
   getFilteredItems,
   hasDuplicateIds,
+  defaultIgnoredKeys,
 } from "./utils";
 import { getCase, SlashCases } from "./cases";
 import { closeSubMenu, nextItem, openSubMenu, prevItem } from "./actions";
-import { SlashMenuMeta, SlashMenuState } from "./types";
+import { MenuElement, SlashMenuMeta, SlashMenuState } from "./types";
 import { SlashMetaTypes } from "./enums";
 
 export const SlashMenuKey = new PluginKey<SlashMenuState>("slash-menu-plugin");
-
-export const SlashMenuPlugin = (config: Partial<SlashMenuState>) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+export const SlashMenuPlugin = (
+  menuElements: MenuElement[],
+  ignoredKeys?: string[]
+) => {
   const initialState: SlashMenuState = {
-    ...config,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    elements: config.filteredElements,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    ignoredKeys: config.ignoredKeys,
+    selected: menuElements[0].id,
+    open: false,
+    filter: "",
+    ignoredKeys: [...defaultIgnoredKeys, ...ignoredKeys],
+    filteredElements: menuElements,
+    elements: menuElements,
   };
   if (hasDuplicateIds(initialState)) {
     throw new Error("Menu elements must have unique id's!");

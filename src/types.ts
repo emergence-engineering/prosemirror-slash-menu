@@ -22,7 +22,6 @@ export type MenuElement = CommandItem | SubMenu;
 export interface SubMenu extends MenuItem {
   type: "submenu";
   elements: MenuElement[];
-  sideEffect?: () => void;
 }
 
 export type SlashMenuState = {
