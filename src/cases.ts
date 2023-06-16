@@ -12,6 +12,7 @@ export enum SlashCases {
   addChar = "addChar",
   removeChar = "removeChar",
   Ignore = "Ignore",
+  Catch = "Catch",
 }
 const defaultConditions: OpeningConditions = {
   shouldOpen: (
@@ -54,6 +55,7 @@ export const getCase = (
   state: SlashMenuState,
   event: KeyboardEvent,
   view: EditorView,
+  ignoredKeys: string[],
   customConditions?: OpeningConditions
 ): SlashCases => {
   const condition = customConditions || defaultConditions;
@@ -88,9 +90,13 @@ export const getCase = (
     if (state.filter.length > 0 && event.key === "Backspace") {
       return SlashCases.removeChar;
     }
-    if (!defaultIgnoredKeys.includes(event.key)) {
+    if (!ignoredKeys.includes(event.key)) {
       return SlashCases.addChar;
     }
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      return SlashCases.Catch;
+    }
+    console.log("here");
   }
 
   return SlashCases.Ignore;

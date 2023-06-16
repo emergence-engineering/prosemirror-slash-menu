@@ -42,7 +42,13 @@ export const SlashMenuPlugin = (
         const editorState = view.state;
         const state = SlashMenuKey.getState(editorState);
         if (!state) return false;
-        const slashCase = getCase(state, event, view, customConditions);
+        const slashCase = getCase(
+          state,
+          event,
+          view,
+          initialState.ignoredKeys,
+          customConditions
+        );
         switch (slashCase) {
           case SlashCases.OpenMenu:
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
@@ -111,6 +117,9 @@ export const SlashMenuPlugin = (
             });
             return true;
           }
+          case SlashCases.Catch: {
+            return true;
+          }
 
           default:
             return false;
@@ -140,11 +149,14 @@ export const SlashMenuPlugin = (
           case SlashMetaTypes.prevItem:
             return prevItem(state);
           case SlashMetaTypes.inputChange: {
+            const newElements = meta.filter
+              ? getFilteredItems(initialState, meta.filter)
+              : initialState.elements;
+            const selectedId = newElements?.[0]?.id;
             return {
               ...state,
-              filteredElements: meta.filter
-                ? getFilteredItems(initialState, meta.filter)
-                : initialState.elements,
+              selected: selectedId || state.selected,
+              filteredElements: newElements,
               filter: meta.filter || "",
             };
           }
