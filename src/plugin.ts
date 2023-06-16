@@ -8,19 +8,27 @@ import {
 } from "./utils";
 import { getCase, SlashCases } from "./cases";
 import { closeSubMenu, nextItem, openSubMenu, prevItem } from "./actions";
-import { MenuElement, SlashMenuMeta, SlashMenuState } from "./types";
+import {
+  MenuElement,
+  OpeningConditions,
+  SlashMenuMeta,
+  SlashMenuState,
+} from "./types";
 import { SlashMetaTypes } from "./enums";
 
 export const SlashMenuKey = new PluginKey<SlashMenuState>("slash-menu-plugin");
 export const SlashMenuPlugin = (
   menuElements: MenuElement[],
-  ignoredKeys?: string[]
+  ignoredKeys?: string[],
+  customConditions?: OpeningConditions
 ) => {
   const initialState: SlashMenuState = {
     selected: menuElements[0].id,
     open: false,
     filter: "",
-    ignoredKeys: [...defaultIgnoredKeys, ...ignoredKeys],
+    ignoredKeys: ignoredKeys
+      ? [...defaultIgnoredKeys, ...ignoredKeys]
+      : defaultIgnoredKeys,
     filteredElements: menuElements,
     elements: menuElements,
   };
@@ -34,7 +42,7 @@ export const SlashMenuPlugin = (
         const editorState = view.state;
         const state = SlashMenuKey.getState(editorState);
         if (!state) return false;
-        const slashCase = getCase(state, event, view);
+        const slashCase = getCase(state, event, view, customConditions);
         switch (slashCase) {
           case SlashCases.OpenMenu:
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });

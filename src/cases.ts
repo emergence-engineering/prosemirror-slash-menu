@@ -1,6 +1,6 @@
 import { EditorView } from "prosemirror-view";
 import { getElementById, defaultIgnoredKeys } from "./utils";
-import { SlashMenuState } from "./types";
+import { OpeningConditions, SlashMenuState } from "./types";
 
 export enum SlashCases {
   OpenMenu = "openMenu",
@@ -13,7 +13,7 @@ export enum SlashCases {
   removeChar = "removeChar",
   Ignore = "Ignore",
 }
-const defaultConditions = {
+const defaultConditions: OpeningConditions = {
   shouldOpen: (
     state: SlashMenuState,
     event: KeyboardEvent,
@@ -27,9 +27,21 @@ const defaultConditions = {
         : editorState.doc.resolve(editorState.selection.from);
 
     const parentNode = resolvedPos?.parent;
-    const inEmptyPar =
-      parentNode?.type.name === "paragraph" && parentNode?.nodeSize === 2;
-    return !state.open && event.key === "/" && inEmptyPar;
+    const inParagraph = parentNode?.type.name === "paragraph";
+    const inEmptyPar = inParagraph && parentNode?.nodeSize === 2;
+    const posInLine = editorState.selection.$head.parentOffset;
+    const prevCharacter = editorState.selection.$head.parent.textContent.slice(
+      posInLine - 1,
+      posInLine
+    );
+    const spaceBeforePos =
+      prevCharacter === " " || prevCharacter === "" || prevCharacter === " ";
+    return (
+      !state.open &&
+      event.key === "/" &&
+      inParagraph &&
+      (inEmptyPar || spaceBeforePos)
+    );
   },
   shouldClose: (state: SlashMenuState, event: KeyboardEvent) =>
     state.open &&
@@ -41,13 +53,15 @@ const defaultConditions = {
 export const getCase = (
   state: SlashMenuState,
   event: KeyboardEvent,
-  view: EditorView
+  view: EditorView,
+  customConditions?: OpeningConditions
 ): SlashCases => {
+  const condition = customConditions || defaultConditions;
   const selected = getElementById(state.selected, state);
-  if (defaultConditions.shouldOpen(state, event, view)) {
+  if (condition.shouldOpen(state, event, view)) {
     return SlashCases.OpenMenu;
   }
-  if (defaultConditions.shouldClose(state, event)) {
+  if (condition.shouldClose(state, event, view)) {
     return SlashCases.CloseMenu;
   }
   if (state.open) {

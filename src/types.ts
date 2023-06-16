@@ -39,3 +39,15 @@ export interface SlashMenuMeta {
   element?: MenuElement;
   filter?: string;
 }
+export interface OpeningConditions {
+  shouldOpen: (
+    state: SlashMenuState,
+    event: KeyboardEvent,
+    view: EditorView
+  ) => boolean;
+  shouldClose: (
+    state: SlashMenuState,
+    event: KeyboardEvent,
+    view: EditorView
+  ) => boolean;
+}
