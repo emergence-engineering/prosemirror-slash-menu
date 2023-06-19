@@ -16,7 +16,7 @@ Simply add to your editor plugins with an initial array of menu elements. An exa
 
 # Settings
 
-## Menu Elements
+### Menu Elements
 
 A menu elements can either be a simple `CommandItem` that executes an action, or it can be a `SubMenu` that can be opened to show its elements. 
 Sub menus can be nested into other sub menus as needed. 
@@ -46,13 +46,13 @@ type MenuElement = CommandItem | SubMenu;
 
 
 ```
-## Ignored Keys 
+### Ignored Keys 
 
 There is an option to provide an array of key codes that the slash menu will ignore while filtering the commands. This can be useful if you have a special key in your app
 that you don't want the slash menu to capture. 
 Note that there is an array of keys that are ignored by default (`defaultIgnoredKeys`), these are keys such as "Shift", "Control", "Home" etc. that have no use in filtering. 
 
-## Opening Conditions
+### Opening Conditions
 
 You can pass your own conditions on when should the menu open or close with `customConditions`. 
 ```typescript
