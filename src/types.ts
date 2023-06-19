@@ -8,12 +8,12 @@ export type MenuItem = {
   id: ItemId;
   label: string;
   type: ItemType;
+  available: (view: EditorView) => boolean;
 };
 
 export interface CommandItem extends MenuItem {
   type: "command";
   command: (view: EditorView) => void;
-  available: () => boolean;
 }
 
 // eslint-disable-next-line no-use-before-define
