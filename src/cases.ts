@@ -96,7 +96,6 @@ export const getCase = (
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       return SlashCases.Catch;
     }
-    console.log("here");
   }
 
   return SlashCases.Ignore;

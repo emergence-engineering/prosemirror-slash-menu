@@ -69,7 +69,6 @@ export const SlashMenuPlugin = (
                 initialState
               ) as SubMenu;
               const callback = submenu?.callbackOnClose;
-              console.log("locked", submenu?.locked);
               if (!submenu?.locked) {
                 callback && callback();
                 dispatchWithMeta(view, SlashMenuKey, {
