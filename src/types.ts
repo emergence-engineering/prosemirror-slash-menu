@@ -9,6 +9,7 @@ export type MenuItem = {
   label: string;
   type: ItemType;
   available: (view: EditorView) => boolean;
+  hidden?: boolean;
 };
 
 export interface CommandItem extends MenuItem {
@@ -23,6 +24,7 @@ export interface SubMenu extends MenuItem {
   type: "submenu";
   elements: MenuElement[];
   callbackOnClose?: () => void;
+  locked?: boolean;
 }
 
 export type SlashMenuState = {
