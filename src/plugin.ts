@@ -7,12 +7,19 @@ import {
   defaultIgnoredKeys,
 } from "./utils";
 import { getCase, SlashCases } from "./cases";
-import { closeSubMenu, nextItem, openSubMenu, prevItem } from "./actions";
+import {
+  closeMenu,
+  closeSubMenu,
+  nextItem,
+  openSubMenu,
+  prevItem,
+} from "./actions";
 import {
   MenuElement,
   OpeningConditions,
   SlashMenuMeta,
   SlashMenuState,
+  SubMenu,
 } from "./types";
 import { SlashMetaTypes } from "./enums";
 
@@ -55,11 +62,24 @@ export const SlashMenuPlugin = (
             return true;
           case SlashCases.CloseMenu: {
             const { subMenuId } = state;
+
             if (subMenuId) {
-              dispatchWithMeta(view, SlashMenuKey, {
-                type: SlashMetaTypes.closeSubMenu,
-                element: getElementById(subMenuId, initialState),
-              });
+              const submenu = getElementById(
+                subMenuId,
+                initialState
+              ) as SubMenu;
+              const callback = submenu?.callbackOnClose;
+              console.log("locked", submenu?.locked);
+              if (!submenu?.locked) {
+                callback && callback();
+                dispatchWithMeta(view, SlashMenuKey, {
+                  type: SlashMetaTypes.closeSubMenu,
+                  element: getElementById(subMenuId, initialState),
+                });
+              } else
+                dispatchWithMeta(view, SlashMenuKey, {
+                  type: SlashMetaTypes.close,
+                });
             } else if (event.key === "/") {
               view.dispatch(
                 editorState.tr.insertText("/").setMeta(SlashMenuKey, {
@@ -137,7 +157,7 @@ export const SlashMenuPlugin = (
           case SlashMetaTypes.open:
             return { ...initialState, open: true };
           case SlashMetaTypes.close:
-            return initialState;
+            return closeMenu(initialState);
           case SlashMetaTypes.execute:
             return initialState;
           case SlashMetaTypes.openSubMenu:
@@ -150,7 +170,7 @@ export const SlashMenuPlugin = (
             return prevItem(state);
           case SlashMetaTypes.inputChange: {
             const newElements = meta.filter
-              ? getFilteredItems(initialState, meta.filter)
+              ? getFilteredItems(state, meta.filter)
               : initialState.elements;
             const selectedId = newElements?.[0]?.id;
             return {

@@ -1,6 +1,12 @@
 import { EditorView } from "prosemirror-view";
 import { PluginKey } from "prosemirror-state";
-import { ItemId, MenuElement, SlashMenuMeta, SlashMenuState } from "./types";
+import {
+  ItemId,
+  MenuElement,
+  SlashMenuMeta,
+  SlashMenuState,
+  SubMenu,
+} from "./types";
 
 export const getElementIds = (item: MenuElement): ItemId[] => {
   if (item.type === "submenu")
@@ -97,13 +103,15 @@ export const dispatchWithMeta = (
 
 export const getFilteredItems = (state: SlashMenuState, input: string) => {
   const regExp = new RegExp(`${input.toLowerCase().replace(/\s/g, "\\s")}`);
-  return getAllElements(state)
-    .map((el) => el)
-    .filter(
-      (element) =>
-        element.label.toLowerCase().match(regExp) !== null &&
-        element.type !== "submenu"
+  if (state.subMenuId && state.subMenuId !== "root") {
+    const submenu = getElementById(state.subMenuId, state) as SubMenu;
+    return submenu.elements.filter(
+      (element) => element.label.toLowerCase().match(regExp) !== null
     );
+  }
+  return state.elements.filter(
+    (element) => element.label.toLowerCase().match(regExp) !== null
+  );
 };
 
 export const defaultIgnoredKeys = [

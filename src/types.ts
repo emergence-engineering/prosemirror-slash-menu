@@ -22,6 +22,7 @@ export type MenuElement = CommandItem | SubMenu;
 export interface SubMenu extends MenuItem {
   type: "submenu";
   elements: MenuElement[];
+  callbackOnClose?: () => void;
 }
 
 export type SlashMenuState = {
@@ -32,6 +33,7 @@ export type SlashMenuState = {
   filter: string;
   elements: MenuElement[];
   ignoredKeys: string[];
+  callbackOnClose?: () => void;
 };
 
 export interface SlashMenuMeta {

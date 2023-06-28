@@ -1,12 +1,16 @@
 import {
   findParent,
   getElementById,
-  getFilteredItems,
   getNextItemId,
   getPreviousItemId,
 } from "./utils";
-import { SlashMenuMeta, SlashMenuState } from "./types";
-
+import { SlashMenuMeta, SlashMenuState, SubMenu } from "./types";
+export const closeMenu = (initialState: SlashMenuState) => {
+  console.log("closingMenu");
+  const callback = initialState.callbackOnClose;
+  callback && callback();
+  return initialState;
+};
 export const openSubMenu = (state: SlashMenuState, meta: SlashMenuMeta) => {
   const menuElement = meta.element;
   if (menuElement?.type === "submenu") {
@@ -25,7 +29,9 @@ export const closeSubMenu = (
   meta: SlashMenuMeta,
   initialState: SlashMenuState
 ) => {
-  const menuElement = meta.element;
+  const menuElement = meta.element as SubMenu;
+  const callback = menuElement.callbackOnClose;
+  callback && callback();
   if (menuElement?.type === "submenu") {
     const parentId = findParent(menuElement.id, initialState.filteredElements);
     if (parentId === "root") {
@@ -56,17 +62,4 @@ export const prevItem = (state: SlashMenuState) => {
 };
 export const filterItems = (state: SlashMenuState, filter: string) => {
   return { ...state, filter };
-};
-export const updateInput = (
-  state: SlashMenuState,
-  meta: SlashMenuMeta,
-  initialState: SlashMenuState
-) => {
-  return {
-    ...state,
-    filteredElements: meta.filter
-      ? getFilteredItems(initialState, meta.filter)
-      : initialState.elements,
-    filter: meta.filter || "",
-  };
 };
