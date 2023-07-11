@@ -102,6 +102,11 @@ interface OpeningConditions {
   ) => boolean;
 }
 ```
+### Open in selection 
+
+You have the option to open the menu even if you have something selected. 
+
+`openInSelection: boolean` 
 
 # Behaviour
 

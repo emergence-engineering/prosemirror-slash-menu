@@ -110,7 +110,8 @@ export const getFilteredItems = (state: SlashMenuState, input: string) => {
     );
   }
   return state.elements.filter(
-    (element) => element.label.toLowerCase().match(regExp) !== null
+    (element) =>
+      element.label.toLowerCase().match(regExp) !== null && !element.locked
   );
 };
 

@@ -11,6 +11,7 @@ import {
   ItemType,
 } from "./types";
 import { SlashMetaTypes } from "./enums";
+import { openSubMenu } from "./actions";
 
 export {
   SlashMenuPlugin,
@@ -27,4 +28,5 @@ export {
   ItemId,
   CommandItem,
   ItemType,
+  openSubMenu,
 };

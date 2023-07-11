@@ -6,7 +6,6 @@ import {
 } from "./utils";
 import { SlashMenuMeta, SlashMenuState, SubMenu } from "./types";
 export const closeMenu = (initialState: SlashMenuState) => {
-  console.log("closingMenu");
   const callback = initialState.callbackOnClose;
   callback && callback();
   return initialState;
@@ -16,6 +15,7 @@ export const openSubMenu = (state: SlashMenuState, meta: SlashMenuMeta) => {
   if (menuElement?.type === "submenu") {
     return {
       ...state,
+      open: true,
       filteredElements: menuElement.elements,
       selected: menuElement.elements[0].id,
       subMenuId: menuElement.id,

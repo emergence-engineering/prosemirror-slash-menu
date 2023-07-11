@@ -8,10 +8,10 @@ const execute = (view: EditorView, state: SlashMenuState) => {
   const menuElement = getElementById(state.selected, state);
   if (!menuElement) return false;
   if (menuElement.type === "command") {
-    menuElement.command(view);
     dispatchWithMeta(view, SlashMenuKey, {
       type: SlashMetaTypes.execute,
     });
+    menuElement.command(view);
   }
   if (menuElement.type === "submenu") {
     dispatchWithMeta(view, SlashMenuKey, {

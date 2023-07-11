@@ -27,7 +27,8 @@ export const SlashMenuKey = new PluginKey<SlashMenuState>("slash-menu-plugin");
 export const SlashMenuPlugin = (
   menuElements: MenuElement[],
   ignoredKeys?: string[],
-  customConditions?: OpeningConditions
+  customConditions?: OpeningConditions,
+  openInSelection?: boolean
 ) => {
   const initialState: SlashMenuState = {
     selected: menuElements[0].id,
@@ -36,7 +37,7 @@ export const SlashMenuPlugin = (
     ignoredKeys: ignoredKeys
       ? [...defaultIgnoredKeys, ...ignoredKeys]
       : defaultIgnoredKeys,
-    filteredElements: menuElements,
+    filteredElements: menuElements.filter((element) => !element.locked),
     elements: menuElements,
   };
   if (hasDuplicateIds(initialState)) {
@@ -54,7 +55,8 @@ export const SlashMenuPlugin = (
           event,
           view,
           initialState.ignoredKeys,
-          customConditions
+          customConditions,
+          openInSelection
         );
         switch (slashCase) {
           case SlashCases.OpenMenu:
@@ -96,10 +98,10 @@ export const SlashMenuPlugin = (
             const menuElement = getElementById(state.selected, state);
             if (!menuElement) return false;
             if (menuElement.type === "command") {
-              menuElement.command(view);
               dispatchWithMeta(view, SlashMenuKey, {
                 type: SlashMetaTypes.execute,
               });
+              menuElement.command(view);
             }
             if (menuElement.type === "submenu") {
               dispatchWithMeta(view, SlashMenuKey, {
