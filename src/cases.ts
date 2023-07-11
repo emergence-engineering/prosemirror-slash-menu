@@ -1,5 +1,5 @@
 import { EditorView } from "prosemirror-view";
-import { getElementById, defaultIgnoredKeys } from "./utils";
+import { getElementById } from "./utils";
 import { OpeningConditions, SlashMenuState } from "./types";
 
 export enum SlashCases {
@@ -14,9 +14,7 @@ export enum SlashCases {
   Ignore = "Ignore",
   Catch = "Catch",
 }
-const defaultConditions = (
-  openInSelection: boolean = false
-): OpeningConditions => {
+const defaultConditions = (openInSelection = false): OpeningConditions => {
   return {
     shouldOpen: (
       state: SlashMenuState,

@@ -5,9 +5,12 @@ import {
   getPreviousItemId,
 } from "./utils";
 import { SlashMenuMeta, SlashMenuState, SubMenu } from "./types";
+
 export const closeMenu = (initialState: SlashMenuState) => {
   const callback = initialState.callbackOnClose;
-  callback && callback();
+  if (callback) {
+    callback();
+  }
   return initialState;
 };
 export const openSubMenu = (state: SlashMenuState, meta: SlashMenuMeta) => {
@@ -31,7 +34,9 @@ export const closeSubMenu = (
 ) => {
   const menuElement = meta.element as SubMenu;
   const callback = menuElement.callbackOnClose;
-  callback && callback();
+  if (callback) {
+    callback();
+  }
   if (menuElement?.type === "submenu") {
     const parentId = findParent(menuElement.id, initialState.filteredElements);
     if (parentId === "root") {
