@@ -9,6 +9,7 @@ export type MenuItem = {
   label: string;
   type: ItemType;
   available: (view: EditorView) => boolean;
+  locked?: boolean;
 };
 
 export interface CommandItem extends MenuItem {
@@ -22,6 +23,7 @@ export type MenuElement = CommandItem | SubMenu;
 export interface SubMenu extends MenuItem {
   type: "submenu";
   elements: MenuElement[];
+  callbackOnClose?: () => void;
 }
 
 export type SlashMenuState = {
@@ -32,6 +34,7 @@ export type SlashMenuState = {
   filter: string;
   elements: MenuElement[];
   ignoredKeys: string[];
+  callbackOnClose?: () => void;
 };
 
 export interface SlashMenuMeta {

@@ -51,6 +51,8 @@ Extension.create({
 
 A menu elements can either be a simple `CommandItem` that executes an action, or it can be a `SubMenu` that can be opened to show its elements. 
 You can nest submenus into other submenus as needed. 
+The `locked` property can be used to hide a menu element from the user. The main idea behind it is to have a `SubMenu` that can only be opened by sending a transaction with `openSubMenu` meta. 
+Once opened it behaves like a second, hidden slash menu. For eg. you can have a command that needs approval or rejection after execution, you could open the slash menu with just these two options that are otherwise hidden.
 
 NOTE: It is necessary to add unique ids to every menu element. 
 ```typescript
@@ -62,12 +64,13 @@ type MenuItem = {
   id: ItemId;
   label: string;
   type: ItemType;
+  available: () => boolean;
+  locked?: boolean;
 };
 
 interface CommandItem extends MenuItem {
  type: "command";
  command: (view: EditorView) => void;
- available: () => boolean;
 }
 
 interface SubMenu extends MenuItem {
@@ -102,6 +105,11 @@ interface OpeningConditions {
   ) => boolean;
 }
 ```
+### Open in selection 
+
+You have the option to open the menu even if you have something selected. 
+
+`openInSelection: boolean` 
 
 # Behaviour
 

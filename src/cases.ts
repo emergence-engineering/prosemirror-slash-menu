@@ -14,51 +14,61 @@ export enum SlashCases {
   Ignore = "Ignore",
   Catch = "Catch",
 }
-const defaultConditions: OpeningConditions = {
-  shouldOpen: (
-    state: SlashMenuState,
-    event: KeyboardEvent,
-    view: EditorView
-  ) => {
-    const editorState = view.state;
-    const resolvedPos =
-      editorState.selection.from < 0 ||
-      editorState.selection.from > editorState.doc.content.size
-        ? null
-        : editorState.doc.resolve(editorState.selection.from);
+const defaultConditions = (
+  openInSelection: boolean = false
+): OpeningConditions => {
+  return {
+    shouldOpen: (
+      state: SlashMenuState,
+      event: KeyboardEvent,
+      view: EditorView
+    ) => {
+      const editorState = view.state;
+      const resolvedPos =
+        editorState.selection.from < 0 ||
+        editorState.selection.from > editorState.doc.content.size
+          ? null
+          : editorState.doc.resolve(editorState.selection.from);
 
-    const parentNode = resolvedPos?.parent;
-    const inParagraph = parentNode?.type.name === "paragraph";
-    const inEmptyPar = inParagraph && parentNode?.nodeSize === 2;
-    const posInLine = editorState.selection.$head.parentOffset;
-    const prevCharacter = editorState.selection.$head.parent.textContent.slice(
-      posInLine - 1,
-      posInLine
-    );
-    const spaceBeforePos =
-      prevCharacter === " " || prevCharacter === "" || prevCharacter === " ";
-    return (
-      !state.open &&
-      event.key === "/" &&
-      inParagraph &&
-      (inEmptyPar || spaceBeforePos)
-    );
-  },
-  shouldClose: (state: SlashMenuState, event: KeyboardEvent) =>
-    state.open &&
-    (event.key === "/" ||
-      event.key === "Escape" ||
-      event.key === "Backspace") &&
-    state.filter.length === 0,
+      const parentNode = resolvedPos?.parent;
+      const inParagraph = parentNode?.type.name === "paragraph";
+      const inEmptyPar = inParagraph && parentNode?.nodeSize === 2;
+      const posInLine = editorState.selection.$head.parentOffset;
+      const prevCharacter =
+        editorState.selection.$head.parent.textContent.slice(
+          posInLine - 1,
+          posInLine
+        );
+      const spaceBeforePos =
+        prevCharacter === " " || prevCharacter === "" || prevCharacter === " ";
+      return (
+        !state.open &&
+        event.key === "/" &&
+        inParagraph &&
+        (inEmptyPar ||
+          spaceBeforePos ||
+          (editorState.selection.from !== editorState.selection.to &&
+            openInSelection))
+      );
+    },
+    shouldClose: (state: SlashMenuState, event: KeyboardEvent) =>
+      state.open &&
+      (event.key === "/" ||
+        event.key === "Escape" ||
+        event.key === "Backspace") &&
+      state.filter.length === 0,
+  };
 };
 export const getCase = (
   state: SlashMenuState,
   event: KeyboardEvent,
   view: EditorView,
   ignoredKeys: string[],
-  customConditions?: OpeningConditions
+  customConditions?: OpeningConditions,
+  shouldOpenInSelection?: boolean
 ): SlashCases => {
-  const condition = customConditions || defaultConditions;
+  const condition =
+    customConditions || defaultConditions(shouldOpenInSelection);
   const selected = getElementById(state.selected, state);
   if (condition.shouldOpen(state, event, view)) {
     return SlashCases.OpenMenu;
@@ -96,7 +106,6 @@ export const getCase = (
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       return SlashCases.Catch;
     }
-    console.log("here");
   }
 
   return SlashCases.Ignore;

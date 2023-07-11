@@ -7,12 +7,19 @@ import {
   defaultIgnoredKeys,
 } from "./utils";
 import { getCase, SlashCases } from "./cases";
-import { closeSubMenu, nextItem, openSubMenu, prevItem } from "./actions";
+import {
+  closeMenu,
+  closeSubMenu,
+  nextItem,
+  openSubMenu,
+  prevItem,
+} from "./actions";
 import {
   MenuElement,
   OpeningConditions,
   SlashMenuMeta,
   SlashMenuState,
+  SubMenu,
 } from "./types";
 import { SlashMetaTypes } from "./enums";
 
@@ -20,7 +27,8 @@ export const SlashMenuKey = new PluginKey<SlashMenuState>("slash-menu-plugin");
 export const SlashMenuPlugin = (
   menuElements: MenuElement[],
   ignoredKeys?: string[],
-  customConditions?: OpeningConditions
+  customConditions?: OpeningConditions,
+  openInSelection?: boolean
 ) => {
   const initialState: SlashMenuState = {
     selected: menuElements[0].id,
@@ -29,7 +37,7 @@ export const SlashMenuPlugin = (
     ignoredKeys: ignoredKeys
       ? [...defaultIgnoredKeys, ...ignoredKeys]
       : defaultIgnoredKeys,
-    filteredElements: menuElements,
+    filteredElements: menuElements.filter((element) => !element.locked),
     elements: menuElements,
   };
   if (hasDuplicateIds(initialState)) {
@@ -47,7 +55,8 @@ export const SlashMenuPlugin = (
           event,
           view,
           initialState.ignoredKeys,
-          customConditions
+          customConditions,
+          openInSelection
         );
         switch (slashCase) {
           case SlashCases.OpenMenu:
@@ -55,11 +64,23 @@ export const SlashMenuPlugin = (
             return true;
           case SlashCases.CloseMenu: {
             const { subMenuId } = state;
+
             if (subMenuId) {
-              dispatchWithMeta(view, SlashMenuKey, {
-                type: SlashMetaTypes.closeSubMenu,
-                element: getElementById(subMenuId, initialState),
-              });
+              const submenu = getElementById(
+                subMenuId,
+                initialState
+              ) as SubMenu;
+              const callback = submenu?.callbackOnClose;
+              if (!submenu?.locked) {
+                callback && callback();
+                dispatchWithMeta(view, SlashMenuKey, {
+                  type: SlashMetaTypes.closeSubMenu,
+                  element: getElementById(subMenuId, initialState),
+                });
+              } else
+                dispatchWithMeta(view, SlashMenuKey, {
+                  type: SlashMetaTypes.close,
+                });
             } else if (event.key === "/") {
               view.dispatch(
                 editorState.tr.insertText("/").setMeta(SlashMenuKey, {
@@ -77,10 +98,10 @@ export const SlashMenuPlugin = (
             const menuElement = getElementById(state.selected, state);
             if (!menuElement) return false;
             if (menuElement.type === "command") {
-              menuElement.command(view);
               dispatchWithMeta(view, SlashMenuKey, {
                 type: SlashMetaTypes.execute,
               });
+              menuElement.command(view);
             }
             if (menuElement.type === "submenu") {
               dispatchWithMeta(view, SlashMenuKey, {
@@ -137,7 +158,7 @@ export const SlashMenuPlugin = (
           case SlashMetaTypes.open:
             return { ...initialState, open: true };
           case SlashMetaTypes.close:
-            return initialState;
+            return closeMenu(initialState);
           case SlashMetaTypes.execute:
             return initialState;
           case SlashMetaTypes.openSubMenu:
@@ -150,7 +171,7 @@ export const SlashMenuPlugin = (
             return prevItem(state);
           case SlashMetaTypes.inputChange: {
             const newElements = meta.filter
-              ? getFilteredItems(initialState, meta.filter)
+              ? getFilteredItems(state, meta.filter)
               : initialState.elements;
             const selectedId = newElements?.[0]?.id;
             return {
