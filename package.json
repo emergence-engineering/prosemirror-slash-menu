@@ -1,12 +1,11 @@
 {
   "name": "prosemirror-slash-menu",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Slash menu for ProseMirror",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "prebuild": "rimraf dist",
     "build": "rollup -c --bundleConfigAsCjs",
     "rebuild": "rollup -c --bundleConfigAsCjs",
