@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.1.8
+
+### Patch Changes
+
+- fix readme ee img
+
 ## 0.1.7
 
 ### Patch Changes

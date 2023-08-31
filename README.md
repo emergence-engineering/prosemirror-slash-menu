@@ -1,6 +1,6 @@
 # prosemirror-slash-menu
 
-![made by Emergence Engineering](https://emergence-engineering.com/ee-logo.svg)
+[![made by Emergence Engineering](https://emergence-engineering.com/ee-logo.svg)](https://emergence-engineering.com)
 
 [**Made by Emergence-Engineering**](https://emergence-engineering.com/)
 
