@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.1.9
+
+### Patch Changes
+
+- package upgrade
+
 ## 0.1.8
 
 ### Patch Changes

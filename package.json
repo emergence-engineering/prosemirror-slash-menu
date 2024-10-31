@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-slash-menu",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Slash menu for ProseMirror",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -41,6 +41,7 @@
   "homepage": "https://github.com/emergence-engineering/prosemirror-slash-menu#readme",
   "dependencies": {
     "prosemirror-state": "^1.4.3",
+    "rimraf": "^6.0.1",
     "prosemirror-view": "^1.31.4"
   },
   "devDependencies": {

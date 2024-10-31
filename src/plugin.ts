@@ -58,6 +58,7 @@ export const SlashMenuPlugin = (
           customConditions,
           openInSelection
         );
+        console.log({ slashCase });
         switch (slashCase) {
           case SlashCases.OpenMenu:
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
@@ -156,6 +157,7 @@ export const SlashMenuPlugin = (
       },
       apply(tr, state) {
         const meta: SlashMenuMeta = tr.getMeta(SlashMenuKey);
+        console.log("slashMenuPlugin", { meta, state });
         switch (meta?.type) {
           case SlashMetaTypes.open:
             return { ...initialState, open: true };
