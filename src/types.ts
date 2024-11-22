@@ -10,6 +10,7 @@ export type MenuItem = {
   type: ItemType;
   available: (view: EditorView) => boolean;
   locked?: boolean;
+  group?: string;
 };
 
 export interface CommandItem extends MenuItem {

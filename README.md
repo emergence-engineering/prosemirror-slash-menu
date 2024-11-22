@@ -65,6 +65,7 @@ A menu elements can either be a simple `CommandItem` that executes an action, or
 You can nest submenus into other submenus as needed.
 The `locked` property can be used to hide a menu element from the user. The main idea behind it is to have a `SubMenu` that can only be opened by sending a transaction with `openSubMenu` meta.
 Once opened it behaves like a second, hidden slash menu. For eg. you can have a command that needs approval or rejection after execution, you could open the slash menu with just these two options that are otherwise hidden.
+The `group` property can be used to group elements together in the menu. It is used to separate elements in the UI. It is not necessary to group elements, but it can be useful for better organization.
 
 NOTE: It is necessary to add unique ids to every menu element.
 
@@ -78,6 +79,7 @@ type MenuItem = {
   type: ItemType;
   available: () => boolean;
   locked?: boolean;
+  group?: string;
 };
 
 interface CommandItem extends MenuItem {

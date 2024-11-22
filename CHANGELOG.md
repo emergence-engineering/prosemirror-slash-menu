@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.2.0
+
+### Minor Changes
+
+- slash menu grouping
+
 ## 0.1.9
 
 ### Patch Changes
