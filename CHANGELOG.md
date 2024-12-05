@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.3.0
+
+### Minor Changes
+
+- ignore case
+
 ## 0.2.0
 
 ### Minor Changes

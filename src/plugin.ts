@@ -58,6 +58,7 @@ export const SlashMenuPlugin = (
           customConditions,
           openInSelection
         );
+        console.log({ slashCase, state });
         switch (slashCase) {
           case SlashCases.OpenMenu:
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
@@ -143,7 +144,7 @@ export const SlashMenuPlugin = (
           case SlashCases.Catch: {
             return true;
           }
-
+          case SlashCases.Ignore:
           default:
             return false;
         }
