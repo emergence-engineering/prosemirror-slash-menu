@@ -1,4 +1,5 @@
 import { Plugin, PluginKey } from "prosemirror-state";
+import { Slice } from "prosemirror-model";
 import {
   dispatchWithMeta,
   getElementById,
@@ -28,7 +29,8 @@ export const SlashMenuPlugin = (
   menuElements: MenuElement[],
   ignoredKeys?: string[],
   customConditions?: OpeningConditions,
-  openInSelection?: boolean
+  openInSelection?: boolean,
+  inlineFilter?: boolean
 ) => {
   const initialState: SlashMenuState = {
     selected: menuElements[0].id,
@@ -58,11 +60,10 @@ export const SlashMenuPlugin = (
           customConditions,
           openInSelection
         );
-        console.log({ slashCase, state });
         switch (slashCase) {
           case SlashCases.OpenMenu:
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
-            return true;
+            return !inlineFilter;
           case SlashCases.CloseMenu: {
             const { subMenuId } = state;
 
@@ -105,6 +106,18 @@ export const SlashMenuPlugin = (
                 type: SlashMetaTypes.execute,
               });
               menuElement.command(view);
+
+              if (inlineFilter) {
+                const { filter } = state;
+                const { to } = view.state.selection;
+                view.dispatch(
+                  view.state.tr.replaceRange(
+                    to - (filter.length + 1),
+                    to,
+                    Slice.empty
+                  )
+                );
+              }
             }
             if (menuElement.type === "submenu") {
               dispatchWithMeta(view, SlashMenuKey, {
@@ -130,7 +143,7 @@ export const SlashMenuPlugin = (
               type: SlashMetaTypes.inputChange,
               filter: state.filter + event.key,
             });
-            return true;
+            return !inlineFilter;
           }
           case SlashCases.removeChar: {
             const newFilter =
@@ -139,7 +152,7 @@ export const SlashMenuPlugin = (
               type: SlashMetaTypes.inputChange,
               filter: newFilter,
             });
-            return true;
+            return !inlineFilter;
           }
           case SlashCases.Catch: {
             return true;
