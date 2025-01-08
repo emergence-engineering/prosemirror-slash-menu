@@ -106,18 +106,6 @@ export const SlashMenuPlugin = (
                 type: SlashMetaTypes.execute,
               });
               menuElement.command(view);
-
-              if (inlineFilter) {
-                const { filter } = state;
-                const { to } = view.state.selection;
-                view.dispatch(
-                  view.state.tr.replaceRange(
-                    to - (filter.length + 1),
-                    to,
-                    Slice.empty
-                  )
-                );
-              }
             }
             if (menuElement.type === "submenu") {
               dispatchWithMeta(view, SlashMenuKey, {

@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.4.2
+
+### Patch Changes
+
+- inline filter
+
 ## 0.4.0
 
 ### Minor Changes
