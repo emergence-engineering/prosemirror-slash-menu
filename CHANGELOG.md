@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.4.3
+
+### Patch Changes
+
+- slash menu command order
+
 ## 0.4.2
 
 ### Patch Changes
