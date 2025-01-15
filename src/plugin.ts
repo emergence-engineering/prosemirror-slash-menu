@@ -65,6 +65,10 @@ export const SlashMenuPlugin = (
             dispatchWithMeta(view, SlashMenuKey, { type: SlashMetaTypes.open });
             return !inlineFilter;
           case SlashCases.CloseMenu: {
+            if (!state.open) {
+              return false;
+            }
+
             const { subMenuId } = state;
 
             if (subMenuId) {

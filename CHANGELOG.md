@@ -1,5 +1,11 @@
 # prosemirror-slash-menu
 
+## 0.4.4
+
+### Patch Changes
+
+- handlekeydown
+
 ## 0.4.3
 
 ### Patch Changes
