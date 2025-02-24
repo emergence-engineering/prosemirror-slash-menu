@@ -1,4 +1,4 @@
-import { Plugin, PluginKey } from "prosemirror-state";
+import { Plugin, PluginKey, Transaction } from "prosemirror-state";
 import { Slice } from "prosemirror-model";
 import {
   dispatchWithMeta,
@@ -30,7 +30,8 @@ export const SlashMenuPlugin = (
   ignoredKeys?: string[],
   customConditions?: OpeningConditions,
   openInSelection?: boolean,
-  inlineFilter?: boolean
+  inlineFilter?: boolean,
+  onMenuClose?: (tr: Transaction, state: SlashMenuState) => void
 ) => {
   const initialState: SlashMenuState = {
     selected: menuElements[0].id,
@@ -166,6 +167,7 @@ export const SlashMenuPlugin = (
           case SlashMetaTypes.open:
             return { ...initialState, open: true };
           case SlashMetaTypes.close:
+            onMenuClose?.(tr, state);
             return closeMenu(initialState);
           case SlashMetaTypes.execute:
             return initialState;

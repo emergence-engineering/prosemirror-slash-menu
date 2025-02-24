@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-slash-menu",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Slash menu for ProseMirror",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

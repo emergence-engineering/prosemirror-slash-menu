@@ -8,9 +8,7 @@ import { SlashMenuMeta, SlashMenuState, SubMenu } from "./types";
 
 export const closeMenu = (initialState: SlashMenuState) => {
   const callback = initialState.callbackOnClose;
-  if (callback) {
-    callback();
-  }
+  callback?.();
   return initialState;
 };
 export const openSubMenu = (state: SlashMenuState, meta: SlashMenuMeta) => {
